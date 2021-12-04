@@ -1,4 +1,7 @@
-﻿using M5NETCORE_EFSALES.CORE.Interfaces;
+﻿using AutoMapper;
+using M5NETCORE_EFSALES.CORE.DTOs;
+using M5NETCORE_EFSALES.CORE.Entities;
+using M5NETCORE_EFSALES.CORE.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,33 +15,82 @@ namespace M5NETCORE_EFSALES.API.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly ICustomerRepository _customerRepository;
+        //private readonly ICustomerRepository _customerRepository;
+        private readonly ICustomerService _customerService;
+        private readonly IMapper _mapper;
 
-        public CustomerController(ICustomerRepository customerRepository)
+        public CustomerController(ICustomerService customerService, IMapper mapper)
         {
-            _customerRepository = customerRepository;
+            _customerService = customerService;
+            _mapper = mapper;
         }
 
         [HttpGet]
         [Route("Customer")]
         public async Task<IActionResult> Customer()
         {
-            var customers = await _customerRepository.GetCustomers();
-            return Ok(customers);
+            var customers = await _customerService.GetCustomers();
+
+            //var customerList = new List<CustomerCountryDTO>();
+            //foreach (var item in customers)
+            //{
+            //    var customer = new CustomerCountryDTO()
+            //    {
+            //        Id = item.Id,
+            //        FirstName = item.FirstName,
+            //        LastName = item.LastName,
+            //        Country = item.Country,
+            //        //City = item.City,
+            //        //Phone = item.Phone
+            //    };
+            //    customerList.Add(customer);
+            //}
+            var customerList = _mapper.Map<IEnumerable<CustomerDTO>>(customers);
+
+            return Ok(customerList);
         }
 
         [HttpGet]
         [Route("CustomerById")]
         public async Task<IActionResult> CustomerById(int id)
         {
-            var customer = await _customerRepository.GetCustomerById(id);
+            var customer = await _customerService.GetCustomerById(id);
             if (customer == null)
                 return NotFound();
-
-            return Ok(customer);
+            var customerDTO = _mapper.Map<CustomerDTO>(customer);
+            return Ok(customerDTO);
         }
 
+        [HttpPost]
+        [Route("PostCustomer")]
+        public async Task<IActionResult> PostCustomer(CustomerPostDTO customerDTO)
+        {
+            var customer = _mapper.Map<Customer>(customerDTO);
+            var result = await _customerService.Insert(customer);
+            if (!result)
+                return BadRequest();
+            return Ok(result);
+        }
 
+        [HttpPut]
+        [Route("PutCustomer")]
+        public async Task<IActionResult> PutCustomer(CustomerDTO customerDTO)
+        {
+            var customer = _mapper.Map<Customer>(customerDTO);
+            var result = await _customerService.Update(customer);
+            if (!result)
+                return NotFound();
+            return Ok(result);
+        }
 
+        [HttpDelete]
+        [Route("DeleteCustomer")]
+        public async Task<IActionResult> DeleteCustomer(int id)
+        {
+            var result = await _customerService.Delete(id);
+            if (!result)
+                return NotFound();
+            return Ok(result);
+        }
     }
 }

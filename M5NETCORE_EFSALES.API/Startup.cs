@@ -1,5 +1,7 @@
 using M5NETCORE_EFSALES.CORE.Interfaces;
+using M5NETCORE_EFSALES.CORE.Services;
 using M5NETCORE_EFSALES.INFRASTRUCTURE.Data;
+using M5NETCORE_EFSALES.INFRASTRUCTURE.Filters;
 using M5NETCORE_EFSALES.INFRASTRUCTURE.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,10 +42,15 @@ namespace M5NETCORE_EFSALES.API
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DevConnection"));
             });
-
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddTransient<ICustomerRepository, CustomerRepository>();
-            
+            services.AddTransient<ICustomerService, CustomerService>();
+
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<GlobalExceptionFilter>();
+            });
 
         }
 

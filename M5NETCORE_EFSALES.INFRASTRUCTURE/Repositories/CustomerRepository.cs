@@ -40,6 +40,7 @@ namespace M5NETCORE_EFSALES.INFRASTRUCTURE.Repositories
         public async Task<bool> Update(Customer customer)
         {
             var customerNow = await _context.Customer.FindAsync(customer.Id);
+            if (customerNow==null) return false;
             customerNow.FirstName = customer.FirstName;
             customerNow.LastName = customer.LastName;
             customerNow.Country = customer.Country;
