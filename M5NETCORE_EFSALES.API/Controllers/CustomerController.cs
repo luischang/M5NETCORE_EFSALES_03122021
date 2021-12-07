@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace M5NETCORE_EFSALES.API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerController : ControllerBase
