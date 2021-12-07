@@ -2,15 +2,14 @@
 using M5NETCORE_EFSALES.CORE.DTOs;
 using M5NETCORE_EFSALES.CORE.Entities;
 using M5NETCORE_EFSALES.CORE.Interfaces;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace M5NETCORE_EFSALES.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerController : ControllerBase
@@ -49,7 +48,7 @@ namespace M5NETCORE_EFSALES.API.Controllers
 
             return Ok(customerList);
         }
-
+        [AllowAnonymous]
         [HttpGet]
         [Route("CustomerById")]
         public async Task<IActionResult> CustomerById(int id)

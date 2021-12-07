@@ -23,6 +23,8 @@ namespace M5NETCORE_EFSALES.INFRASTRUCTURE.Data
         public virtual DbSet<OrderItem> OrderItem { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<Supplier> Supplier { get; set; }
+        public virtual DbSet<UserAuth> UserAuth { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
