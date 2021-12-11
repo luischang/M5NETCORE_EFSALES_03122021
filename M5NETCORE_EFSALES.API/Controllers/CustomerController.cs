@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace M5NETCORE_EFSALES.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerController : ControllerBase
@@ -48,7 +48,7 @@ namespace M5NETCORE_EFSALES.API.Controllers
 
             return Ok(customerList);
         }
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpGet]
         [Route("CustomerById")]
         public async Task<IActionResult> CustomerById(int id)
